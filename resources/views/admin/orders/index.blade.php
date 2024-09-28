@@ -17,6 +17,9 @@
         display: block;
         opacity: 1;
     }
+    .fs-13 {
+        font-size: 13px;
+    }
 </style>
 <!-- Style End -->
 
@@ -42,9 +45,25 @@
             <!-- [ Main Content ] start -->
             <div class="main-content">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12">                        
                         <div class="card border-top-0">
                             <div class="card-body">
+                                    <div class="mb-3">
+                                        <form class="d-flex align-items-center" id="searchForm" autocomplete="off">
+                                        <div class="me-3" style="width: 100px;">
+                                        <label for="InvoiceProduct" class="form-label">Search Type</label>
+                                        <select class="rounded form-select" id="searchBy">
+                                            <option value="name">Ism</option>
+                                            <option value="phone">Phone</option>
+                                        </select>
+                                        </div>
+                                        <!-- <input class="form-control" > -->
+                                        <div class="form-group" style="width: 100%;">
+                                            <label for="InvoiceProduct" class="form-label">Data Search</label>
+                                            <input type="text" class="form-control" id="searchInput" placeholder="Search..." onkeyup="filterOrders()">
+                                        </div>
+                                        </form>
+                                    </div>
                                 <div class="col-xxl-8 w-auto">
                                     <div class="card stretch stretch-full">
                                         <div class="card-header">
@@ -84,88 +103,97 @@
                                                 <table class="table table-hover mb-0">
                                                     <thead>
                                                         <tr class="border-b">
-                                                            <th scope="row">Users</th>
-                                                            <th>Proposal</th>
-                                                            <th>Date</th>
-                                                            <th>Status</th>
-                                                            <th class="text-end">Actions</th>
+                                                            <th class="fs-6" scope="row">Users</th>
+                                                            <th class="fs-6">Phone</th>
+                                                            <th class="fs-6">product</th>
+                                                            <th class="fs-6">Amount</th>
+                                                            <th class="fs-6">State</th>
+                                                            <th class="fs-6">Status</th>
+                                                            <th class="fs-6 text-center">Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach($orders['orders']['data'] as $data)
-                                                        <tr>
-                                                            <td class="align-middle">
-                                                                @if(isset($data['data']['client']))
-                                                                <div class="d-flex align-items-center gap-3">
-                                                                    <div class="avatar-image">
-                                                                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="" class="img-fluid">
+                                                        @foreach($orders['orders']['data'] as $data)
+                                                            <tr>
+                                                                <td class="align-middle">
+                                                                    @if(isset($data['data']['client']))
+                                                                    <div class="d-flex align-items-center gap-3">
+                                                                        <div class="avatar-image">
+                                                                            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="" class="img-fluid">
+                                                                        </div>
+                                                                        <a href="javascript:void(0);">
+                                                                            <span class="d-block">{{ $data['data']['client']['firstName'] ?? 'N/A' }}
+                                                                                {{ $data['data']['client']['lastName'] ?? 'N/A' }}
+                                                                            </span>
+                                                                            <span class="fs-12 d-block fw-normal text-muted">{{ $data['data']['client']['email'] ?? 'no email' }}</span>
+                                                                        </a>
                                                                     </div>
-                                                                    <a href="javascript:void(0);">
-                                                                        <span class="d-block">{{ $data['data']['client']['firstName'] ?? 'N/A' }}
-                                                                            {{ $data['data']['client']['lastName'] ?? 'N/A' }}
-                                                                        </span>
-                                                                        <span class="fs-12 d-block fw-normal text-muted">{{ $data['data']['client']['email'] ?? 'N/A' }}</span>
+                                                                    @else
+                                                                        <span class="badge bg-soft-danger text-danger">No Data</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <span class="badge text-dark fs-13">{{ $data['data']['client']['phone'] ?? 'No Phone' }}</span>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    @if($data['product_ids'] === "osago")
+                                                                    <span class="badge bg-soft-warning text-warning fs-13">{{ $data['product_ids'] ?? 'No Product' }}</span>
+                                                                    @elseif($data['product_ids'] === "accident-family")
+                                                                    <span class="badge bg-soft-warning text-warning fs-13">{{ $data['product_ids'] ?? 'No Product' }}</span>
+                                                                    @elseif($data['product_ids'] === "accident-travelers")
+                                                                    <span class="badge bg-soft-warning text-warning fs-13">{{ $data['product_ids'] ?? 'No Product' }}</span>
+                                                                    @elseif($data['product_ids'] === "accident-comprehensive")
+                                                                    <span class="badge bg-soft-warning text-warning fs-13">{{ $data['product_ids'] ?? 'No Product' }}</span>
+                                                                    @else
+                                                                    @endif
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    @if(isset($data['state']) && $data['state'] > 1)
+                                                                        <span class="badge bg-soft-success text-success">To'landi</span>
+                                                                    @else
+                                                                        <span class="badge bg-soft-danger text-danger">To'lanmadi</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    @if($data['policy_id'] !== "none")
+                                                                    <span class="badge bg-soft-success text-success">Muvaffaqiyatli yaratildi</span>
+                                                                    @else
+                                                                    <span class="badge bg-soft-danger text-danger">Bekor qilindi</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    @if(isset($data['payment_type']) && $data['payment_type'] == "click")
+                                                                    <!-- <span>{{ $data['payment_type'] ?? 'N/A' }}</span> -->
+                                                                    <div title="click orqali to'lov qilingan!" class="img-container" style="position: relative; display: inline-block;">
+                                                                        <img src="https://api.uznews.uz/storage/uploads/posts/images/75489/inner/JbhfoSczvY.jpg" width="60px" height="40px" style="object-fit: cover;">
+                                                                    </div>
+                                                                    @elseif(isset($data['payment_type']) && $data['payment_type'] == "payme")
+                                                                    <!-- <span>{{ $data['payment_type'] ?? 'N/A' }}</span> -->
+                                                                    <div title="payme orqali to'lov qilingan!" class="img-container" style="position: relative; display: inline-block;">
+                                                                        <img src="https://www.gazeta.uz/media/img/2023/08/IyiSHW16913516816386_b.jpg" width="60px" height="40px" style="object-fit: cover;">
+                                                                    </div>
+                                                                    @elseif(isset($data['payment_type']) && $data['payment_type'] == "oson")
+                                                                    <!-- <span>{{ $data['payment_type'] ?? 'N/A' }}</span> -->
+                                                                    <div title="oson orqali to'lov qilingan!" class="img-container" style="position: relative; display: inline-block;">
+                                                                        <img src="https://www.gazeta.uz/media/img/2023/08/g3e61v16934799940984_b.jpg" width="60px" height="40px" style="object-fit: cover;">
+                                                                    </div>
+
+                                                                    @elseif(isset($data['payment_type']) && $data['payment_type'] == "none")
+                                                                    <div title="to'lov qilinmagan!" class="img-container" style="position: relative; display: inline-block;">
+                                                                        <img src="https://www.shutterstock.com/image-vector/line-art-no-credit-card-260nw-1166998309.jpg" width="60px" height="40px" style="object-fit: cover;">
+                                                                    </div>
+                                                                    @else
+
+                                                                    @endif
+
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <a href="orders/edit">
+                                                                        <i class="fa-solid fa-pen-to-square"></i>
                                                                     </a>
-                                                                </div>
-                                                                @else
-                                                                    <span class="badge bg-soft-danger text-danger">Not Found</span>
-                                                                @endif
-                                                            </td>
-                                                            <td class="align-middle">{{ $data['data']['client']['phone'] ?? 'N/A' }}</td>
-                                                            <td class="align-middle">{{ $data['product_ids'] ?? 'N/A' }}</td>
-                                                            <td class="align-middle">
-                                                                @if(isset($data['amount']) && $data['amount'])
-                                                                <span class="badge bg-soft-success text-success fs-6">{{ $data['amount'] ?? 'N/A' }}</span>
-                                                                @else
-                                                                @endif
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                @if(isset($data['state']) && $data['state'] > 1)
-                                                                    <span class="badge bg-soft-success text-success">{{ $data['state'] }}</span>
-                                                                @else
-                                                                    <span class="badge bg-soft-danger text-danger">{{ $data['state'] }}</span>
-                                                                @endif
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                @if(isset($data['payment_type']) && $data['payment_type'] == "click")
-                                                                <!-- <span>{{ $data['payment_type'] ?? 'N/A' }}</span> -->
-                                                                <div class="img-container" style="position: relative; display: inline-block;">
-                                                                    <img src="https://api.uznews.uz/storage/uploads/posts/images/75489/inner/JbhfoSczvY.jpg" width="60px" height="40px" style="object-fit: cover;">
-                                                                    <span class="hover-text d-none" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); color: white; padding: 5px; font-size: 12px; transition: all 0.4s ease; text-align: center; white-space: nowrap;">
-                                                                        click orqali to'lov qilingan!
-                                                                    </span>
-                                                                </div>
-                                                                @elseif(isset($data['payment_type']) && $data['payment_type'] == "payme")
-                                                                <!-- <span>{{ $data['payment_type'] ?? 'N/A' }}</span> -->
-                                                                <div class="img-container" style="position: relative; display: inline-block;">
-                                                                    <img src="https://www.gazeta.uz/media/img/2023/08/IyiSHW16913516816386_b.jpg" width="60px" height="40px" style="object-fit: cover;">
-                                                                    <span class="hover-text d-none" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); color: white; padding: 5px; font-size: 12px; transition: all 0.4s ease; text-align: center; white-space: nowrap;">
-                                                                        payme orqali to'lov qilingan!
-                                                                    </span>
-                                                                </div>
-                                                                @elseif(isset($data['payment_type']) && $data['payment_type'] == "oson")
-                                                                <!-- <span>{{ $data['payment_type'] ?? 'N/A' }}</span> -->
-                                                                <div class="img-container" style="position: relative; display: inline-block;">
-                                                                    <img src="https://www.gazeta.uz/media/img/2023/08/g3e61v16934799940984_b.jpg" width="60px" height="40px" style="object-fit: cover;">
-                                                                    <span class="hover-text d-none" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); color: white; padding: 5px; font-size: 12px; transition: all 0.4s ease; text-align: center; white-space: nowrap;">
-                                                                        oson orqali to'lov qilingan!
-                                                                    </span>
-                                                                </div>
-
-                                                                @elseif(isset($data['payment_type']) && $data['payment_type'] == "none")
-                                                                <div class="img-container" style="position: relative; display: inline-block;">
-                                                                    <img src="https://www.shutterstock.com/image-vector/line-art-no-credit-card-260nw-1166998309.jpg" width="60px" height="40px" style="object-fit: cover;">
-                                                                    <span class="hover-text d-none" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); color: white; padding: 5px; font-size: 12px; transition: all 0.4s ease; text-align: center; white-space: nowrap;">
-                                                                        to'lov qilinmagan!
-                                                                    </span>
-                                                                </div>
-                                                                @else
-
-                                                                @endif
-
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -254,10 +282,10 @@
                                             N/A
                                         @endif
                                     </p>
-                                @endforeach
+                                @endforeach -->
 
 
-                              @foreach($orders['orders']['data'] as $order)
+                              <!-- @foreach($orders['orders']['data'] as $order)
                                 <p>
                                     @if(isset($data['data']['insuredPersons']))
                                         {{ $data['data']['insuredPersons']['firstName'] ?? 'N/A' }}
@@ -296,5 +324,36 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
+<script>
+    function filterOrders() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const searchBy = document.getElementById('searchBy').value;
+        const rows = document.querySelectorAll('tr'); 
+
+        rows.forEach(row => {
+            const nameCell = row.querySelector('td:nth-child(1)');
+            const phoneCell = row.querySelector('td:nth-child(2)'); 
+
+            let textToSearch = '';
+
+            if (searchBy === 'name' && nameCell) {
+                textToSearch = nameCell.innerText.toLowerCase();
+            } else if (searchBy === 'phone' && phoneCell) {
+                textToSearch = phoneCell.innerText.toLowerCase();
+            }
+
+            if (textToSearch.includes(input)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none'
+            }
+        });
+    }
+
+    document.getElementById('searchForm').onsubmit = function(event) {
+        event.preventDefault(); // Formani yuborishni to‘xtatadi
+        filterOrders(); // Qidiruvni amalga oshiradi
+    };
+</script>
 @endsection
 

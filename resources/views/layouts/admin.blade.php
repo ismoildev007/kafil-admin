@@ -39,6 +39,22 @@
         .select2-container--default .select2-results__option {
             color: black !important; /* Text color */
         }
+
+    .customizer-handle {
+        animation: moveUpDown 20s ease-in-out infinite;
+    }
+
+    @keyframes moveUpDown {
+        0% {
+            transform: translateY(0); /* Boshlang'ich holat */
+        }
+        50% {
+            transform: translateY(-50px); /* Yuqoriga harakat */
+        }
+        100% {
+            transform: translateY(50px); /* Pastga qaytish */
+        }
+    }
     </style>
 
     <!--! The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags !-->
@@ -444,7 +460,7 @@
 <!--! BEGIN: Theme Customizer !-->
 <!--! ================================================================ !-->
 <div class="theme-customizer">
-    <div class="customizer-handle">
+    <div class="customizer-handle animation-live">
         <a href="javascript:void(0);" class="cutomizer-open-trigger bg-primary">
             <i class="feather-settings"></i>
         </a>
