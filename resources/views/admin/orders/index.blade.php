@@ -7,17 +7,17 @@
         display: block !important;
         opacity: 1;
     }
-    
+
     .hover-text {
         display: none;
         opacity: 0;
     }
-    
+
     .img-container:hover .hover-text {
         display: block;
         opacity: 1;
     }
-</style>  
+</style>
 <!-- Style End -->
 
     <main class="nxl-container">
@@ -95,7 +95,7 @@
                                                     @foreach($orders['orders']['data'] as $data)
                                                         <tr>
                                                             <td class="align-middle">
-                                                                @if(isset($data['data']['client']))  
+                                                                @if(isset($data['data']['client']))
                                                                 <div class="d-flex align-items-center gap-3">
                                                                     <div class="avatar-image">
                                                                         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="" class="img-fluid">
@@ -116,7 +116,7 @@
                                                             <td class="align-middle">
                                                                 @if(isset($data['amount']) && $data['amount'])
                                                                 <span class="badge bg-soft-success text-success fs-6">{{ $data['amount'] ?? 'N/A' }}</span>
-                                                                @else 
+                                                                @else
                                                                 @endif
                                                             </td>
                                                             <td class="align-middle">
@@ -151,7 +151,7 @@
                                                                         oson orqali to'lov qilingan!
                                                                     </span>
                                                                 </div>
-                                                                    
+
                                                                 @elseif(isset($data['payment_type']) && $data['payment_type'] == "none")
                                                                 <div class="img-container" style="position: relative; display: inline-block;">
                                                                     <img src="https://www.shutterstock.com/image-vector/line-art-no-credit-card-260nw-1166998309.jpg" width="60px" height="40px" style="object-fit: cover;">
@@ -160,9 +160,9 @@
                                                                     </span>
                                                                 </div>
                                                                 @else
-            
+
                                                                 @endif
-            
+
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -180,7 +180,7 @@
                                                             <a href="{{ route('orders.index', ['page' => $orders['orders']['current_page'] - 1]) }}"><i class="bi bi-arrow-left"></i></a>
                                                         </li>
                                                     @endif
-            
+
                                                     {{-- Sahifalar orasida navigatsiya --}}
                                                     @php
                                                         $currentPage = $orders['orders']['current_page'];
@@ -188,7 +188,7 @@
                                                         $start = max(1, $currentPage - 2); // Boshlang'ich nuqtani aniqlash
                                                         $end = min($lastPage, $currentPage + 2); // Tugatish nuqtasi
                                                     @endphp
-            
+
                                                     {{-- Birinchi sahifa har doim ko'rsatiladi --}}
                                                     @if($start > 1)
                                                         <li><a href="{{ route('orders.index', ['page' => 1]) }}">1</a></li>
@@ -196,14 +196,14 @@
                                                             <li>...</li> {{-- Orada "..." belgisini qo'yish --}}
                                                         @endif
                                                     @endif
-            
+
                                                     {{-- Aktiv bo'lgan sahifa va unga yaqin sahifalarni chiqarish --}}
                                                     @for ($i = $start; $i <= $end; $i++)
                                                         <li>
                                                             <a href="{{ route('orders.index', ['page' => $i]) }}" class="{{ $i == $currentPage ? 'active' : '' }}">{{ $i }}</a>
                                                         </li>
                                                     @endfor
-            
+
                                                     {{-- Oxirgi sahifa har doim ko'rsatiladi --}}
                                                     @if($end < $lastPage)
                                                         @if($end < $lastPage - 1)
@@ -211,7 +211,7 @@
                                                         @endif
                                                         <li><a href="{{ route('orders.index', ['page' => $lastPage]) }}">{{ $lastPage }}</a></li>
                                                     @endif
-            
+
                                                     {{-- Keyingi sahifaga o'tish tugmasi --}}
                                                     @if ($currentPage < $lastPage)
                                                         <li>
@@ -221,7 +221,7 @@
                                                         <li class="disabled"><i class="bi bi-arrow-right"></i></li>
                                                     @endif
                                                 </ul>
-            
+
                                             </div>
                                     </div>
                                 </div>
@@ -230,8 +230,8 @@
                                 <!-- @foreach($orders['orders']['data'] as $order)
                                     <p>
                                          @if(isset($data['data']['client']))
-                                            {{ $data['data']['client']['firstName'] ?? 'N/A' }} 
-                                            {{ $data['data']['client']['lastName'] ?? 'NA'}} 
+                                            {{ $data['data']['client']['firstName'] ?? 'N/A' }}
+                                            {{ $data['data']['client']['lastName'] ?? 'NA'}}
                                             {{ $data['data']['client']['surName'] ?? 'N/A'}}
                                             {{ $data['data']['client']['legalTypeId'] ?? 'N/A'}}
                                             {{ $data['data']['client']['firstNameEn'] ?? 'N/A'}}
@@ -255,13 +255,13 @@
                                         @endif
                                     </p>
                                 @endforeach
-                                
+
 
                               @foreach($orders['orders']['data'] as $order)
                                 <p>
                                     @if(isset($data['data']['insuredPersons']))
-                                        {{ $data['data']['insuredPersons']['firstName'] ?? 'N/A' }} 
-                                        {{ $data['data']['insuredPersons']['lastName'] ?? 'NA'}} 
+                                        {{ $data['data']['insuredPersons']['firstName'] ?? 'N/A' }}
+                                        {{ $data['data']['insuredPersons']['lastName'] ?? 'NA'}}
                                         {{ $data['data']['insuredPersons']['surName'] ?? 'N/A'}}
                                         {{ $data['data']['insuredPersons']['legalTypeId'] ?? 'N/A'}}
                                         {{ $data['data']['insuredPersons']['firstNameEn'] ?? 'N/A'}}
@@ -296,6 +296,5 @@
             <!-- [ Main Content ] end -->
         </div>
     </main>
+@endsection
 
-
-    
