@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $page = $request->input('page', 1); // 1 sahifa default
@@ -26,52 +23,31 @@ class OrderController extends Controller
 
         return redirect()->back()->with('error', 'Failed to fetch orders from API.');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function edit($id)
     {
-        //
+        $response = Http::put("https://kafil.uz/api/kafil/order/{$id}");
+
+        if ($response->successful()) {
+            $order = $response->json();
+            return view('admin.orders.edit', compact('order'));
+        } else {
+            dd($response->status(), $response->body());
+        }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        $request->validate([
+            'status' => 'required|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
+        $response = Http::put("https://kafil.uz/api/kafil/order/{$id}", [
+            'status' => $request->input('status'),
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        return view("admin.orders.edit");
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+        if ($response->successful()) {
+            return redirect()->route('orders.index', $id)->with('success', 'Order state updated successfully');
+        } else {
+            return redirect()->back()->with('error', 'Failed to update order state.');
+        }
     }
 }

@@ -45,7 +45,7 @@
             <!-- [ Main Content ] start -->
             <div class="main-content">
                 <div class="row">
-                    <div class="col-lg-12">                        
+                    <div class="col-lg-12">
                         <div class="card border-top-0">
                             <div class="card-body">
                                     <div class="mb-3">
@@ -188,7 +188,7 @@
 
                                                                 </td>
                                                                 <td class="text-center">
-                                                                    <a href="orders/edit">
+                                                                    <a href="{{ route('order.edit', $data['id']) }}">
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                     </a>
                                                                 </td>
@@ -328,11 +328,11 @@
     function filterOrders() {
         const input = document.getElementById('searchInput').value.toLowerCase();
         const searchBy = document.getElementById('searchBy').value;
-        const rows = document.querySelectorAll('tr'); 
+        const rows = document.querySelectorAll('tr');
 
         rows.forEach(row => {
             const nameCell = row.querySelector('td:nth-child(1)');
-            const phoneCell = row.querySelector('td:nth-child(2)'); 
+            const phoneCell = row.querySelector('td:nth-child(2)');
 
             let textToSearch = '';
 

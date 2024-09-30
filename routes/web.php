@@ -13,6 +13,7 @@ Route::middleware([IsAdmin::class])->group(function () {
         return view('admin');
     })->name('dashboard');
     Route::get('/orders',  [OrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/edit',  [OrderController::class, 'edit'])->name('orders.edit');
+    Route::get('/order/{id}', [OrderController::class, 'edit'])->name('order.edit');
+    Route::put('/order/update/{id}', [OrderController::class, 'update'])->name('order.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
